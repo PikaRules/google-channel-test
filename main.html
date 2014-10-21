@@ -40,8 +40,8 @@
 			};
 
 			socket.onmessage = function(message) {
-				//var data = jQuery.parseJSON(message.data)
-				console.log(message);
+				var data = jQuery.parseJSON(message.data)
+				console.log(data);
 			};
 
 			socket.onerror = function(error) {

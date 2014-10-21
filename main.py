@@ -6,6 +6,7 @@ from google.appengine.api import channel
 from google.appengine.api import users
 import logging
 from models import *
+import json
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -29,8 +30,8 @@ class GameUpdater():
 			channel_key = self.channel_key
 		channel.send_message(channel_key,message)
 
-class GameSession():
 
+class GameSession():
 
 	def create_new_game_connection(self, channel_key):
 		game_connection = GameConnection(channel_key=channel_key)
@@ -93,12 +94,24 @@ class MainPage(webapp2.RequestHandler):
 				self.game_session.restore_game_connection(channel_key)
 				if not self.game_session.is_user_in_game_session(current_user):
 					self.game_session.add_user_client(current_user,client_id)
-					game_updater.new_user('nuevo usuario %s' % current_user.email, channel_key)
+					message = {
+						'key': 'new_user',
+						'data':{
+							'email': current_user.email()
+						}
+					}
+					game_updater.new_user(json.dumps(message), channel_key)
 			else:
 				#create game session
 				self.game_session.create_new_game_connection(channel_key)
 				self.game_session.add_user_client(current_user,client_id)
-				game_updater.new_user('nuevo usuario %s' % current_user.email, channel_key)
+				message = {
+						'key': 'new_user',
+						'data':{
+							'email': current_user.email()
+						}
+					}
+				game_updater.new_user(json.dumps(message), channel_key)
 
 
 			#get users in the game channel

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/_ah/channel/jsapi"></script>
+	<link rel="stylesheet" type="text/css" href="static/css/mystyle.css">
+	<title> piedra papel o tijera </title>
+</head>
+<body>
+	<h1>hola</h1>
+	<div >
+		loggin user: {{user}}
+	</div>
+	<div class='list-of-users'>
+		<h3>Logged users: </h3>
+		<ul>
+			{% for item in users %}
+				<li><span>{{item.user.email()}} </span></li>
+			{% endfor %}
+		</ul>
+	</div>
+
+	<script>
+
+	    $(document).ready(function () {
+
+			client_id = '{{client_id}}';
+			channel_key = '{{channel_key}}';
+
+			console.log({
+				'client_id': client_id,
+				'channel_key': channel_key
+			});
+
+			channel = new goog.appengine.Channel(channel_key);
+				socket = channel.open();
+				socket.onopen = function() {
+				console.log('Channel established.');
+			};
+
+			socket.onmessage = function(message) {
+				//var data = jQuery.parseJSON(message.data)
+				console.log(message);
+			};
+
+			socket.onerror = function(error) {
+				console.log('Channel error: ' + error.description);
+			};
+
+			socket.onclose = function() {
+				console.log('Channel closed.');
+			};
+
+	    });
+  	</script>
+</body>
+</html>

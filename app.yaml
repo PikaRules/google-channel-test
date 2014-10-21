@@ -1,0 +1,35 @@
+application: martel-test
+version: master
+runtime: python27
+api_version: 1
+threadsafe: yes 
+
+
+
+libraries:
+- name: jinja2
+  version: latest
+- name: webapp2
+  version: latest
+- name: webob
+  version: latest
+
+inbound_services:
+- channel_presence
+
+
+handlers:
+
+- url: /static
+  static_dir: static
+
+#enabling interactive console
+- url: /admin/.*
+  script: google.appengine.ext.admin.application
+  login: admin
+
+
+# Main script
+- url: .*
+  script: main.app
+  login: required

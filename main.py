@@ -28,7 +28,7 @@ class GameUpdater():
 	def new_user(self,message,channel_key=''):
 		if channel_key == '':
 			channel_key = self.channel_key
-		channel.send_message(channel_key,message)
+		channel.send_message(channel_key,json.dumps(message))
 
 
 class GameSession():
@@ -100,7 +100,7 @@ class MainPage(webapp2.RequestHandler):
 							'email': current_user.email()
 						}
 					}
-					game_updater.new_user(json.dumps(message), channel_key)
+					game_updater.new_user(message, channel_key)
 			else:
 				#create game session
 				self.game_session.create_new_game_connection(channel_key)
@@ -111,7 +111,7 @@ class MainPage(webapp2.RequestHandler):
 							'email': current_user.email()
 						}
 					}
-				game_updater.new_user(json.dumps(message), channel_key)
+				game_updater.new_user(message, channel_key)
 
 
 			#get users in the game channel
